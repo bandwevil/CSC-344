@@ -1,17 +1,17 @@
 # Generic Makefile for C programs, builds an executable from
 # all of the .c files present in the current directory
 
-EXECUTABLE = musicModifierThing
+EXECUTABLE = arrange
 
 CC = gcc
 CFLAGS = -Wall -g -pedantic
-LINK =
+LINK = -lsndfile
 OBJECTS := $(patsubst %.c,%.o,$(wildcard *.c))
 
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(CFLAGS) $(LINK) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LINK)
 
 %.o:%.c
 	$(CC) $(CFLAGS) -c -o $@ $<

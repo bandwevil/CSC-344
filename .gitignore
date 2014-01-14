@@ -1,0 +1,13 @@
+# C files #
+###########
+*.o
+*.obj
+*.elf
+*.a
+*.lib
+*.out
+
+# Misc #
+########
+*.wav
+*.mp3
