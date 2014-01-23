@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="TcZFiH" name="Project2" projectType="audioplug" version="0.1"
+              bundleIdentifier="com.tsaadus.Project2" includeBinaryInAppConfig="1"
+              buildVST="1" buildAU="0" pluginName="Project2" pluginDesc="Project2"
+              pluginManufacturer="tsaadus" pluginManufacturerCode="Manu" pluginCode="Plug"
+              pluginChannelConfigs="{1, 2}" pluginIsSynth="1" pluginWantsMidiIn="1"
+              pluginProducesMidiOut="0" pluginSilenceInIsSilenceOut="0" pluginEditorRequiresKeys="0"
+              pluginAUExportPrefix="Project2AU" pluginRTASCategory="" aaxIdentifier="com.yourcompany.Project2"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.0">
+  <MAINGROUP id="NGIgQT" name="Project2">
+    <GROUP id="{9EE25BF4-1A71-7DF1-EBEF-120689A0EDDA}" name="Source">
+      <FILE id="zHlUCz" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="lz3jyP" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="yXifTq" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="P5TWMj" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2013 targetFolder="Builds/VisualStudio2013" vstFolder="&quot;C:\SDKs\VST3 SDK&quot;">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="Project2"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="Project2" postbuildCommand="copy /Y &quot;$(TargetPath)&quot; &quot;C:\VST\344 Synth&quot;"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_opengl" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_graphics" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_events" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_data_structures" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_cryptography" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_core" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="C:\Juce\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="C:\Juce\modules"/>
+      </MODULEPATHS>
+    </VS2013>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+</JUCERPROJECT>
