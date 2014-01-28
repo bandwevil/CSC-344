@@ -66,9 +66,24 @@ public:
     void getStateInformation (MemoryBlock& destData);
     void setStateInformation (const void* data, int sizeInBytes);
 
+	// this is kept up to date with the midi messages that arrive, and the UI component
+	// registers with it so it can represent the incoming messages
+	MidiKeyboardState keyboardState;
+
+	// this keeps a copy of the last set of time info that was acquired during an audio
+	// callback - the UI component will read this and display it.
+	AudioPlayHead::CurrentPositionInfo lastPosInfo;
+
+	// these are used to persist the UI's size - the values are stored along with the
+	// filter's other parameters, and the UI component will update them when it gets
+	// resized.
+	int lastUIWidth, lastUIHeight;
+
 private:
+	Synthesiser synth;
+
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Project2AudioProcessor)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Project2AudioProcessor)
 };
 
 #endif  // PLUGINPROCESSOR_H_INCLUDED

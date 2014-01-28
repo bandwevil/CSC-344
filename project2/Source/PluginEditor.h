@@ -36,8 +36,7 @@
                                                                     //[/Comments]
 */
 class Project2AudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Timer,
-                                      public ButtonListener
+                                      public Timer
 {
 public:
     //==============================================================================
@@ -55,7 +54,6 @@ public:
 
     void paint (Graphics& g);
     void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
 
 
 
@@ -64,9 +62,6 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Label> label;
-    ScopedPointer<ToggleButton> toggleButton;
-    ScopedPointer<ToggleButton> toggleButton2;
 
 
     //==============================================================================
