@@ -4,7 +4,7 @@
               bundleIdentifier="com.tsaadus.Project2" includeBinaryInAppConfig="1"
               buildVST="1" buildAU="0" pluginName="Project2" pluginDesc="Project2"
               pluginManufacturer="tsaadus" pluginManufacturerCode="Manu" pluginCode="Plug"
-              pluginChannelConfigs="{1, 2}" pluginIsSynth="1" pluginWantsMidiIn="1"
+              pluginChannelConfigs="{0, 2}" pluginIsSynth="1" pluginWantsMidiIn="1"
               pluginProducesMidiOut="0" pluginSilenceInIsSilenceOut="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="Project2AU" pluginRTASCategory="" aaxIdentifier="com.yourcompany.Project2"
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.0">

@@ -1,27 +1,27 @@
-﻿Build started 1/27/2014 4:51:27 PM.
+﻿Build started 1/28/2014 7:55:47 PM.
      1>Project "C:\Users\tsaad_000\Documents\GitHub\csc344\project2\Builds\VisualStudio2013\Project2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\JuceLibraryCode /IC:\Juce\modules /I"..\..\\\"C:\SDKs\VST3 SDK\"" /Zi /nologo /W4 /WX- /MP /O1 /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D JUCER_VS2013_78A5020=1 /D JUCE_APP_VERSION=0.1 /D JUCE_APP_VERSION_HEX=0x100 /D _WINDLL /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"Release\\" /Fd"Release\\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Source\PluginProcessor.cpp
          PluginProcessor.cpp
      1>..\..\Source\PluginProcessor.cpp(52): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
-     1>..\..\Source\PluginProcessor.cpp(57): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>..\..\Source\PluginProcessor.cpp(64): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>..\..\Source\PluginProcessor.cpp(238): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(243): warning C4100: 'newValue' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(243): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(247): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(252): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(267): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(272): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(315): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(319): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(324): warning C4100: 'newName' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(324): warning C4100: 'index' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(329): warning C4100: 'samplesPerBlock' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(329): warning C4100: 'sampleRate' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(384): warning C4100: 'destData' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(391): warning C4100: 'sizeInBytes' : unreferenced formal parameter
-     1>..\..\Source\PluginProcessor.cpp(391): warning C4100: 'data' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(65): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>..\..\Source\PluginProcessor.cpp(72): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>..\..\Source\PluginProcessor.cpp(81): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>..\..\Source\PluginProcessor.cpp(280): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(285): warning C4100: 'newValue' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(302): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(307): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(322): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(327): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(370): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(374): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(379): warning C4100: 'newName' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(379): warning C4100: 'index' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(384): warning C4100: 'samplesPerBlock' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(384): warning C4100: 'sampleRate' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(439): warning C4100: 'destData' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(446): warning C4100: 'sizeInBytes' : unreferenced formal parameter
+     1>..\..\Source\PluginProcessor.cpp(446): warning C4100: 'data' : unreferenced formal parameter
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Release\\Project2.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"Release\\Project2.pdb" /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Release\Project2.lib" /MACHINE:X86 /SAFESEH /DLL Release\resources.res
          Release\\PluginProcessor.obj
@@ -59,4 +59,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:51.32
+Time Elapsed 00:00:27.80

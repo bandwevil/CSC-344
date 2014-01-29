@@ -52,9 +52,17 @@ public:
 			+ (table[(int)lower + 1] * fraction);
 	}
 
-	void squareInit(){
+	//Square wave with variable duty cycle
+	//Expects value between 0 and 1 for duty, non-inclusive (0 and 1 are DC)
+	void squareInit(double dutyCycle){
+		if (dutyCycle <= 0) {
+			dutyCycle = 0.01;
+		}
+		else if (dutyCycle >= 1) {
+			dutyCycle = 0.99;
+		}
 		for (int i = 0; i < WAVETABLE_SIZE; i++){
-			table[i] = ((i < (WAVETABLE_SIZE / 2)) ? 1.0 : -1.0);
+			table[i] = ((i < (WAVETABLE_SIZE * dutyCycle)) ? 1.0 : -1.0);
 		}
 		table[WAVETABLE_SIZE] = 1.0;
 	}
@@ -66,24 +74,58 @@ public:
 		table[WAVETABLE_SIZE] = 0.0;
 	}
 
-	/*    void triangleInit(){
-
-	}*/
+	/* White noise generator, from -1 to 1 */
+	void noiseInit() {
+		Random *noiseGen = new Random(Time::currentTimeMillis());
+		for (int i = 0; i < WAVETABLE_SIZE; i++) {
+			table[i] = (noiseGen->nextDouble() * 2) - 1;
+		}
+	}
 };
 
 #define HARMONICS 4
 
-/* Code for the syth voice processing */
+/* Code for syth voice processing */
 class MySynthVoice : public SynthesiserVoice
 {
 public:
 	MySynthVoice()
 		: playing(notPlaying),
 		angleDelta(0.0),
-		tailOff(0.0),
-		wavetable()
+		tailOff(0.0)
 	{
-		wavetable.squareInit();
+		squareWave12.squareInit(0.125);
+		squareWave25.squareInit(0.25);
+		squareWave50.squareInit(0.50);
+		squareWave75.squareInit(0.75);
+		sineWave.sineInit();
+		noiseWave.noiseInit();
+	}
+
+	/* Super hack-ish wavetable changing. */
+	void setWave(int waveNum)
+	{
+		switch (waveNum) {
+		case Project2AudioProcessor::Square12:
+			currentWave = squareWave12;
+			break;
+		case Project2AudioProcessor::Square25:
+			currentWave = squareWave25;
+			break;
+		case Project2AudioProcessor::Square50:
+			currentWave = squareWave50;
+			break;
+		case Project2AudioProcessor::Square75:
+			currentWave = squareWave75;
+			break;
+		case Project2AudioProcessor::sine:
+		default:
+			currentWave = sineWave;
+			break;
+		case Project2AudioProcessor::noise:
+			currentWave = noiseWave;
+			break;
+		}
 	}
 
 	bool canPlaySound(SynthesiserSound* sound)
@@ -153,7 +195,7 @@ public:
 				const double o1 = (sin(o1_angle * 2.0 * double_Pi));
 				const double amplitude = 1.0 + (0.5 * o1);
 				const float currentSampleVal =
-					(float)(wavetable.lookup(currentAngle) * levelMult * amplitude);
+					(float)(currentWave.lookup(currentAngle) * levelMult * amplitude);
 
 				for (int i = outputBuffer.getNumChannels(); --i >= 0;) {
 					*outputBuffer.getSampleData(i, sample) += currentSampleVal;
@@ -198,24 +240,24 @@ private:
 	double currentAngle, angleDelta;
 	double level, tailOff;
 	// osc1
-	double o1_freq = 2;
+	double o1_freq = 10;
 	double o1_angle, o1_angleDelta;
-	// a wavetable
-	WaveTable wavetable;
+	//Wavetables for all of our waves
+	WaveTable squareWave12, squareWave25, squareWave50, squareWave75, sineWave, noiseWave, currentWave;
 };
 
 //==============================================================================
 Project2AudioProcessor::Project2AudioProcessor()
 {
-	// Set up some default values..
-	lastUIWidth = 400;
-	lastUIHeight = 200;
-
 	lastPosInfo.resetToDefault();
 
 	// Initialise the synth...
-	for (int i = 4; --i >= 0;)
-		synth.addVoice(new MySynthVoice());   // These voices will play our custom sine-wave sounds..
+	for (int i = 0; i <= 4; i++) {
+		MySynthVoice *voice = new MySynthVoice();
+		voice->setWave(3); // Default to 50% square wave
+		synth.addVoice(voice);   // These voices will play our custom sounds..
+	}
+
 
 	synth.addSound(new MySynthSound());
 }
@@ -242,6 +284,19 @@ float Project2AudioProcessor::getParameter (int index)
 
 void Project2AudioProcessor::setParameter (int index, float newValue)
 {
+	switch (index){
+	case Square12:
+	case Square25:
+	case Square50:
+	case Square75:
+	case sine:
+	case noise:
+		/* Set all synths to the new wavetype */
+		for (int i = 0; i < synth.getNumVoices(); i++) {
+			((MySynthVoice*)(synth.getVoice(i)))->setWave(index);
+		}
+		break;
+	}
 }
 
 const String Project2AudioProcessor::getParameterName (int index)

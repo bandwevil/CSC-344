@@ -79,6 +79,8 @@ public:
 	// resized.
 	int lastUIWidth, lastUIHeight;
 
+	enum Waves{Square12, Square25, Square50, Square75, sine, noise};
+
 private:
 	Synthesiser synth;
 

@@ -36,7 +36,9 @@
                                                                     //[/Comments]
 */
 class Project2AudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Timer
+                                      public Timer,
+                                      public ButtonListener,
+                                      public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -54,6 +56,8 @@ public:
 
     void paint (Graphics& g);
     void resized();
+    void buttonClicked (Button* buttonThatWasClicked);
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged);
 
 
 
@@ -62,6 +66,11 @@ private:
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<ToggleButton> toggleButton;
+    ScopedPointer<ToggleButton> toggleButton2;
+    ScopedPointer<ComboBox> comboBox;
+    ScopedPointer<Label> label;
+    ScopedPointer<ToggleButton> toggleButton3;
 
 
     //==============================================================================
