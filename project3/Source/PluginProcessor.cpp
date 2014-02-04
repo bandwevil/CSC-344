@@ -11,10 +11,15 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+const float defaultDelay = 0.5f;
 
 //==============================================================================
 Project3AudioProcessor::Project3AudioProcessor()
+: delayBuffer(2, 12000)
 {
+	delay = defaultDelay;
+
+	delayPosition = 0;
 }
 
 Project3AudioProcessor::~Project3AudioProcessor()
@@ -137,13 +142,23 @@ void Project3AudioProcessor::releaseResources()
 
 void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    for (int channel = 0; channel < getNumInputChannels(); ++channel)
-    {
-        float* channelData = buffer.getSampleData (channel);
+	const int numSamples = buffer.getNumSamples();
+	int channel, dp = 0;
 
-        // ..do something to the data...
+    for (channel = 0; channel < getNumInputChannels(); ++channel)
+    {
+		float* channelData = buffer.getSampleData(channel);
+		float* delayData = delayBuffer.getSampleData(jmin(channel, delayBuffer.getNumChannels() - 1));
+		dp = delayPosition;
+
+		for (int i = 0; i < numSamples; ++i)
+		{
+			const float in = channelData[i];
+			channelData[i] += delayData[dp];
+			delayData[dp] = (delayData[dp] + in) * delay;
+			if (++dp >= delayBuffer.getNumSamples())
+				dp = 0;
+		}
     }
 
     // In case we have more outputs than inputs, we'll clear any output
@@ -158,12 +173,12 @@ void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
 //==============================================================================
 bool Project3AudioProcessor::hasEditor() const
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return false; // (change this to false if you choose to not supply an editor)
 }
 
 AudioProcessorEditor* Project3AudioProcessor::createEditor()
 {
-    return new Project3AudioProcessorEditor (this);
+	return nullptr;
 }
 
 //==============================================================================

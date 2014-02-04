@@ -28,20 +28,20 @@
                        isDebug="0" optimisation="2" targetName="project3" postbuildCommand="copy /Y &quot;$(TargetPath)&quot; &quot;C:\VST\344&quot;"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_video" path="C:\Juce\"/>
-        <MODULEPATH id="juce_opengl" path="C:\Juce\"/>
-        <MODULEPATH id="juce_gui_extra" path="C:\Juce\"/>
-        <MODULEPATH id="juce_gui_basics" path="C:\Juce\"/>
-        <MODULEPATH id="juce_graphics" path="C:\Juce\"/>
-        <MODULEPATH id="juce_events" path="C:\Juce\"/>
-        <MODULEPATH id="juce_data_structures" path="C:\Juce\"/>
-        <MODULEPATH id="juce_cryptography" path="C:\Juce\"/>
-        <MODULEPATH id="juce_core" path="C:\Juce\"/>
-        <MODULEPATH id="juce_audio_processors" path="C:\Juce\"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="C:\Juce\"/>
-        <MODULEPATH id="juce_audio_formats" path="C:\Juce\"/>
-        <MODULEPATH id="juce_audio_devices" path="C:\Juce\"/>
-        <MODULEPATH id="juce_audio_basics" path="C:\Juce\"/>
+        <MODULEPATH id="juce_video" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_opengl" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_gui_extra" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_gui_basics" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_graphics" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_events" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_data_structures" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_cryptography" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_core" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_audio_processors" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_audio_formats" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_audio_devices" path="C:\Juce\modules\"/>
+        <MODULEPATH id="juce_audio_basics" path="C:\Juce\modules\"/>
       </MODULEPATHS>
     </VS2013>
   </EXPORTFORMATS>

@@ -1,0 +1,13 @@
+﻿Build started 2/3/2014 4:55:29 PM.
+     1>Project "C:\Users\tsaad_000\Documents\GitHub\CSC-344\project3\Builds\VisualStudio2013\project3.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         project3.vcxproj -> C:\Users\tsaad_000\Documents\GitHub\CSC-344\project3\Builds\VisualStudio2013\.\Release\project3.dll
+       PostBuildEvent:
+         copy /Y "C:\Users\tsaad_000\Documents\GitHub\CSC-344\project3\Builds\VisualStudio2013\.\Release\project3.dll" "C:\VST\344"
+         :VCEnd
+                 1 file(s) copied.
+     1>Done Building Project "C:\Users\tsaad_000\Documents\GitHub\CSC-344\project3\Builds\VisualStudio2013\project3.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.94
