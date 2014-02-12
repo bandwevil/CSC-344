@@ -11,15 +11,19 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-const float defaultDelay = 0.5f;
-
 //==============================================================================
 Project3AudioProcessor::Project3AudioProcessor()
-: delayBuffer(2, 12000)
 {
-	delay = defaultDelay;
+	// Set up default params
+	DefaultParams[frequency] = 1000;
+	DefaultParams[resonance] = 0.8;
 
-	delayPosition = 0;
+	for (int i = 0; i < totalNumParams; i++) {
+		UserParams[i] = DefaultParams[i];
+	}
+	newFreqFlag = true;
+
+	UIUpdateFlag = true;
 }
 
 Project3AudioProcessor::~Project3AudioProcessor()
@@ -34,26 +38,62 @@ const String Project3AudioProcessor::getName() const
 
 int Project3AudioProcessor::getNumParameters()
 {
-    return 0;
+    return totalNumParams;
 }
 
 float Project3AudioProcessor::getParameter (int index)
 {
-    return 0.0f;
+	if (index >= 0 && index < totalNumParams) {
+		return UserParams[index];
+	}
+	else { //Invalid index
+		return 0.0f;
+	}
 }
 
 void Project3AudioProcessor::setParameter (int index, float newValue)
 {
+	if (index >= 0 && index < totalNumParams) {
+		//UserParams[index] = newValue;
+	}
+	//Filter freq changed, re-compute coefficients
+	if (index == frequency) {
+		newFreqFlag = true;
+	}
 }
 
 const String Project3AudioProcessor::getParameterName (int index)
 {
-    return String::empty;
+	switch (index) {
+	case frequency:
+		return "Frequency";
+		break;
+	case resonance:
+		return "Resonance";
+		break;
+	default:
+		return String::empty;
+	}
 }
 
 const String Project3AudioProcessor::getParameterText (int index)
 {
-    return String::empty;
+	if (index >= 0 && index < totalNumParams) {
+		return String(UserParams[index]);
+	}
+	else {
+		return String::empty;
+	}
+}
+
+float Project3AudioProcessor::getParameterDefaultValue (int index)
+{
+	if (index >= 0 && index < totalNumParams) {
+		return DefaultParams[index];
+	}
+	else {
+		return 1;
+	}
 }
 
 const String Project3AudioProcessor::getInputChannelName (int channelIndex) const
@@ -132,6 +172,9 @@ void Project3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+	v1 = 0;
+	v2 = 0;
+	newFreqFlag = true;
 }
 
 void Project3AudioProcessor::releaseResources()
@@ -143,21 +186,34 @@ void Project3AudioProcessor::releaseResources()
 void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
 	const int numSamples = buffer.getNumSamples();
-	int channel, dp = 0;
+	int channel;
+
+	//Do calculation for new coefficients (can only get valid sampleRate while in processBlock)
+	//if (newFreqFlag) {
+		const double n = 1.0 / tan(double_Pi * 2000 / getSampleRate());
+		const double nSquared = n * n;
+		const double c1 = 1.0 / (1.0 + std::sqrt(2.0) * n + nSquared);
+
+		coefficients[0] = (float) (c1);
+		coefficients[1] = (float) (c1 * 2.0);
+		coefficients[2] = (float) (c1);
+		coefficients[3] = (float) (c1 * 2.0 * (1.0 - nSquared));
+		coefficients[4] = (float) (c1 * (1.0 - std::sqrt(2.0) * n + nSquared));
+
+		newFreqFlag = false;
+	//}
 
     for (channel = 0; channel < getNumInputChannels(); ++channel)
     {
 		float* channelData = buffer.getSampleData(channel);
-		float* delayData = delayBuffer.getSampleData(jmin(channel, delayBuffer.getNumChannels() - 1));
-		dp = delayPosition;
 
-		for (int i = 0; i < numSamples; ++i)
-		{
+		for (int i = 0; i < numSamples; i++) {
 			const float in = channelData[i];
-			channelData[i] += delayData[dp];
-			delayData[dp] = (delayData[dp] + in) * delay;
-			if (++dp >= delayBuffer.getNumSamples())
-				dp = 0;
+			const float out = coefficients[0] * in + v1;
+			channelData[i] = out;
+
+			v1 = coefficients[1] * in - coefficients[3] * out + v2;
+			v2 = coefficients[2] * in - coefficients[4] * out;
 		}
     }
 
@@ -173,7 +229,8 @@ void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
 //==============================================================================
 bool Project3AudioProcessor::hasEditor() const
 {
-    return false; // (change this to false if you choose to not supply an editor)
+	//We are ignoring UI for now (might add in if time)
+    return false;
 }
 
 AudioProcessorEditor* Project3AudioProcessor::createEditor()

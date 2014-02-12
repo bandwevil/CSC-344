@@ -45,6 +45,8 @@ public:
     const String getParameterName (int index);
     const String getParameterText (int index);
 
+	float Project3AudioProcessor::getParameterDefaultValue(int index);
+
     const String getInputChannelName (int channelIndex) const;
     const String getOutputChannelName (int channelIndex) const;
     bool isInputChannelStereoPair (int index) const;
@@ -68,17 +70,25 @@ public:
 
 	enum Parameters
 	{
-		delayParam = 0,
+		frequency = 0,
+		resonance,
 
 		totalNumParams
 	};
 
-	float delay;
+	//Allow Plugin processor to signal UI updates
+	bool NeedsUIUpdate(){ return UIUpdateFlag; }
+	void RequestUIUpdate() { UIUpdateFlag = true; }
+	void ClearUIUpdateFlag() { UIUpdateFlag = false; }
 
 private:
     //==============================================================================
-	AudioSampleBuffer delayBuffer;
-	int delayPosition;
+	float UserParams[totalNumParams];
+	float DefaultParams[totalNumParams];
+	bool UIUpdateFlag;
+	float coefficients[5];
+	float v1, v2;
+	bool newFreqFlag;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Project3AudioProcessor)
 };

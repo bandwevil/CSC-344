@@ -17,11 +17,12 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_A4A1A17CB73E3957__
-#define __JUCE_HEADER_A4A1A17CB73E3957__
+#ifndef __JUCE_HEADER_B404FB061FC87C55__
+#define __JUCE_HEADER_B404FB061FC87C55__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
+#include "PluginProcessor.h"
 //[/Headers]
 
 
@@ -34,15 +35,21 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class NewComponent  : public Component
+class Project3AudioProcessorEditor  : public AudioProcessorEditor,
+                                      public Timer
 {
 public:
     //==============================================================================
-    NewComponent ();
-    ~NewComponent();
+    Project3AudioProcessorEditor (Project3AudioProcessor* ownerFilter);
+    ~Project3AudioProcessorEditor();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+	void timerCallback();
+	Project3AudioProcessor* getProcessor() const
+	{
+		return static_cast <Project3AudioProcessor*>(getAudioProcessor());
+	}
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -58,10 +65,10 @@ private:
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Project3AudioProcessorEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_A4A1A17CB73E3957__
+#endif   // __JUCE_HEADER_B404FB061FC87C55__

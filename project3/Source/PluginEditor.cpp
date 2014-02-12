@@ -27,20 +27,23 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-NewComponent::NewComponent ()
+Project3AudioProcessorEditor::Project3AudioProcessorEditor (Project3AudioProcessor* ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (600, 400);
+    setSize (300, 300);
 
 
     //[Constructor] You can add your own custom stuff here..
+	getProcessor()->RequestUIUpdate(); //Flag for UI update when initialized
+	startTimer(200); //200 ms UI updating
     //[/Constructor]
 }
 
-NewComponent::~NewComponent()
+Project3AudioProcessorEditor::~Project3AudioProcessorEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
@@ -52,18 +55,18 @@ NewComponent::~NewComponent()
 }
 
 //==============================================================================
-void NewComponent::paint (Graphics& g)
+void Project3AudioProcessorEditor::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    g.fillAll (Colour (0xff01000e));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
 }
 
-void NewComponent::resized()
+void Project3AudioProcessorEditor::resized()
 {
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
@@ -72,6 +75,13 @@ void NewComponent::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void Project3AudioProcessorEditor::timerCallback()
+{
+	Project3AudioProcessor* ourProcessor = getProcessor();
+	if (ourProcessor->NeedsUIUpdate()) { //Update UI as necessary
+		ourProcessor->ClearUIUpdateFlag();
+	}
+}
 //[/MiscUserCode]
 
 
@@ -84,11 +94,12 @@ void NewComponent::resized()
 
 BEGIN_JUCER_METADATA
 
-<JUCER_COMPONENT documentType="Component" className="NewComponent" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
+<JUCER_COMPONENT documentType="Component" className="Project3AudioProcessorEditor"
+                 componentName="" parentClasses="public AudioProcessorEditor, public Timer"
+                 constructorParams="Project3AudioProcessor* ownerFilter" variableInitialisers="AudioProcessorEditor(ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="600" initialHeight="400">
-  <BACKGROUND backgroundColour="ffffffff"/>
+                 fixedSize="1" initialWidth="300" initialHeight="300">
+  <BACKGROUND backgroundColour="ff01000e"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
