@@ -16,7 +16,8 @@ Project3AudioProcessor::Project3AudioProcessor()
 {
 	// Set up default params
 	DefaultParams[frequency] = 1000;
-	DefaultParams[resonance] = 0.8;
+	DefaultParams[preDis] = 10;
+	DefaultParams[postDis] = 10;
 
 	for (int i = 0; i < totalNumParams; i++) {
 		UserParams[i] = DefaultParams[i];
@@ -54,7 +55,7 @@ float Project3AudioProcessor::getParameter (int index)
 void Project3AudioProcessor::setParameter (int index, float newValue)
 {
 	if (index >= 0 && index < totalNumParams) {
-		//UserParams[index] = newValue;
+		UserParams[index] = newValue;
 	}
 	//Filter freq changed, re-compute coefficients
 	if (index == frequency) {
@@ -67,9 +68,6 @@ const String Project3AudioProcessor::getParameterName (int index)
 	switch (index) {
 	case frequency:
 		return "Frequency";
-		break;
-	case resonance:
-		return "Resonance";
 		break;
 	default:
 		return String::empty;
@@ -190,7 +188,7 @@ void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
 
 	//Do calculation for new coefficients (can only get valid sampleRate while in processBlock)
 	//if (newFreqFlag) {
-		const double n = 1.0 / tan(double_Pi * 2000 / getSampleRate());
+		const double n = 1.0 / tan(double_Pi * UserParams[frequency] / getSampleRate());
 		const double nSquared = n * n;
 		const double c1 = 1.0 / (1.0 + std::sqrt(2.0) * n + nSquared);
 
@@ -208,12 +206,33 @@ void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
 		float* channelData = buffer.getSampleData(channel);
 
 		for (int i = 0; i < numSamples; i++) {
-			const float in = channelData[i];
-			const float out = coefficients[0] * in + v1;
-			channelData[i] = out;
+			float in = channelData[i];
 
+			//Apply pre-filter distortion
+			if (in > UserParams[preDis]) {
+				in = UserParams[preDis];
+			}
+
+			//Apply our filter coefficients for the low pass
+			float out = coefficients[0] * in + v1;
+			
 			v1 = coefficients[1] * in - coefficients[3] * out + v2;
 			v2 = coefficients[2] * in - coefficients[4] * out;
+
+			//Avoid weirdness at almost 0 values
+			if (v1 < 1.0e-5 && v1 > -1.0e-5) {
+				v1 = 0;
+			}
+			if (v2 < 1.0e-5 && v2 > -1.0e-5) {
+				v2 = 0;
+			}
+
+			//Apply post distortion and write to channel
+			if (out > UserParams[postDis]) {
+				out = UserParams[postDis];
+			}
+
+			channelData[i] = out;
 		}
     }
 
@@ -229,13 +248,12 @@ void Project3AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
 //==============================================================================
 bool Project3AudioProcessor::hasEditor() const
 {
-	//We are ignoring UI for now (might add in if time)
-    return false;
+    return true;
 }
 
 AudioProcessorEditor* Project3AudioProcessor::createEditor()
 {
-	return nullptr;
+	return new Project3AudioProcessorEditor(this);
 }
 
 //==============================================================================

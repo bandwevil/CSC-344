@@ -71,7 +71,8 @@ public:
 	enum Parameters
 	{
 		frequency = 0,
-		resonance,
+		preDis,
+		postDis,
 
 		totalNumParams
 	};

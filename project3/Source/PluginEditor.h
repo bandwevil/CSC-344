@@ -36,7 +36,8 @@
                                                                     //[/Comments]
 */
 class Project3AudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Timer
+                                      public Timer,
+                                      public SliderListener
 {
 public:
     //==============================================================================
@@ -54,6 +55,7 @@ public:
 
     void paint (Graphics& g);
     void resized();
+    void sliderValueChanged (Slider* sliderThatWasMoved);
 
 
 
@@ -62,6 +64,12 @@ private:
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<Slider> slider;
+    ScopedPointer<Slider> slider2;
+    ScopedPointer<Slider> slider4;
+    ScopedPointer<Label> label;
+    ScopedPointer<Label> label2;
+    ScopedPointer<Label> label3;
 
 
     //==============================================================================
