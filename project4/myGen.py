@@ -12,6 +12,8 @@ try:  # Ensure set available
 except NameError:
     from sets import Set as set
 
+scale = [74, 72, 69, 67, 64, 62, 60, 57, 55, 52]
+    
 class Button:
     def __init__(self, image_off_up, image_off_down, image_on_up, image_on_down, pos_x, pos_y):
         self.image = image_off_up
@@ -22,8 +24,13 @@ class Button:
         self.pos = self.image.get_rect().move(pos_x, pos_y)
         self.down = False
         self.alive = False
+        self.playing = False
 
     def check_mouse(self, mouse_pos):
+        if self.alive:
+            self.image = self.on_up
+        else:
+            self.image = self.off_up
         if (pygame.mouse.get_pressed()[0] == 1 and self.pos.collidepoint(mouse_pos)):
             if (self.down == False):
                 self.down = True
@@ -34,10 +41,6 @@ class Button:
                     self.alive = True
                     self.image = self.on_down
         else:
-            if (self.alive):
-                self.image = self.on_up
-            else:
-                self.image = self.off_up
             self.down = False
     def randomize(self):
         if (random.getrandbits(1) == 1):
@@ -45,7 +48,56 @@ class Button:
         else:
             self.image = self.on_up
         
+
+def count_neighbors(grid, x, y):
+    sum = 0
+    #Super-hackish way to add wrap-around -- Must change if altering size of CA --
+    left = (x-1 if x-1 >= 0 else 9)
+    down = (y-1 if y-1 >= 0 else 9)
+    right = (x+1 if x+1 <= 9 else 0)
+    up =    (y+1 if y+1 <= 9 else 0)
     
+    if (grid[left][up].alive):
+        sum += 1
+    if (grid[x][up].alive):
+        sum += 1
+    if (grid[right][up].alive):
+        sum += 1
+    if (grid[left][y].alive):
+        sum += 1
+    if (grid[right][y].alive):
+        sum += 1
+    if (grid[left][down].alive):
+        sum += 1
+    if (grid[x][down].alive):
+        sum += 1
+    if (grid[right][down].alive):
+        sum += 1
+    return sum
+        
+def update_cells(current_state, x, y):
+    neighbors = count_neighbors(current_state, x, y)
+    
+    #Hard-coding of Conway's GoL
+    if(current_state[x][y].alive):
+        if (neighbors == 2 or neighbors == 3):
+            return True
+        else:
+            return False
+    else:
+        if (neighbors == 3):
+            return True
+        else:
+            return False
+    
+def cell_to_midi(button, x, y, midi):
+    if button.alive and not button.playing:
+        midi.note_on(scale[y], 110, x)
+        button.playing = True
+    elif not button.alive and button.playing:
+        midi.note_off(scale[y], None, x)
+        button.playing = False
+
 def main_gen(device_id):
     pygame.init()
     pygame.midi.init()
@@ -59,41 +111,58 @@ def main_gen(device_id):
     screen = pygame.display.set_mode((600, 600))
     background = pygame.Surface(screen.get_size())
     background.fill(Color('slategray'))
+    screen.blit(background, (0, 0))
+    
     button_off_up   = pygame.image.load(os.path.join('data', 'blue_button06.png')).convert_alpha()
     button_off_down = pygame.image.load(os.path.join('data', 'blue_button07.png')).convert_alpha()
     button_on_up    = pygame.image.load(os.path.join('data', 'blue_button09.png')).convert_alpha()
     button_on_down  = pygame.image.load(os.path.join('data', 'blue_button10.png')).convert_alpha()
-    screen.blit(background, (0, 0))
     
-    # Initialize CA cells
+    playing = False
+    
+    # Initialize CA cells as well as a future state for updating the CA
     objects = []
+    future_state = []
     for x in range(10):
         objects.append([])
+        future_state.append([])
         for y in range(10):
+            future_state[x].append(False)
             o = Button(button_off_up, button_off_down, button_on_up, button_on_down, 10+x*27, 10+y*27)
             objects[x].append(o)
 
     # Main loop
     while 1:
         for event in pygame.event.get():
-            if event.type in (QUIT, KEYDOWN):
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
                 sys.exit()
-                
-        # Update each tile, clearing its current display
+            elif event.type == KEYDOWN and event.key == K_SPACE:
+                playing = not playing
+            
+        # Clear the current buttons, calculate the cells' next state
+        i = 0
         for l in objects:
+            j = 0
             for o in l:
                 o.check_mouse(pygame.mouse.get_pos())
+                if (playing):
+                    future_state[i][j] = update_cells(objects, i, j)
                 screen.blit(background, o.pos, o.pos)
-        # Redraw tiles
+                j += 1
+            i += 1
+        # Redraw tiles, copy new state data over
+        i =  0
         for l in objects:
+            j = 0
             for o in l:
+                if playing:
+                    o.alive = future_state[i][j]
+                    cell_to_midi(o, i, j, midi_out)
                 screen.blit(o.image, o.pos)
+                j += 1
+            i += 1
         pygame.display.update()
         pygame.time.delay(100)
-    
-    midi_out.note_on(55, 127)
-    time.sleep(.167)
-    midi_out.note_off(55)
     
 def print_device_info():
     pygame.midi.init()
@@ -113,14 +182,14 @@ def print_device_info():
     
 def print_usage():
     print("Usage:")
-    print("-o [device_id] - main usage, define MIDI output device")
+    print("-o [device_id] - main program, define MIDI output device")
     print("-l             - list current MIDI devices")
 
 if __name__ == "__main__":
     if "-o" in sys.argv:
         try:
             dev_id = int(sys.argv[-1])
-        except: #default to device 3 (default MIDI loopback on my system)
+        except: #default to device 1 (Windows MIDI device)
             dev_id = 1
         main_gen(dev_id)
     elif "-l" in sys.argv:
